@@ -28,8 +28,8 @@ trait UserAuthenticateTrait
 
     public function signout()
     {
-        //unset($_SESSION['user']);
-        session()->remove('user');
+        unset($_SESSION['user']);
+        //session()->remove('user');
 
         if (isset($_COOKIE['credentials'])) {
             setcookie('credentials', null, time() - 3600);
@@ -51,6 +51,7 @@ trait UserAuthenticateTrait
 
     public function auto_login()
     {
+        
         $encryptedCredentials = $_COOKIE['credentials'] ?? null;
         if (!$encryptedCredentials) {
             return;
@@ -59,11 +60,13 @@ trait UserAuthenticateTrait
         $decriptedCredentials = decrypt($encryptedCredentials, ENCRYPTION_KEY);
 
         $credentials = unserialize($decriptedCredentials);
+        
         $user = $this->authenticate($credentials);
         if ($user) {
             
             $_SESSION['user'] = serialize($user);
         }
+ 
     }
 
 

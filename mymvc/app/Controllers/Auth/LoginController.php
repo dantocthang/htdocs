@@ -26,8 +26,8 @@ class LoginController extends BaseController
         $user = $this->authenticate($credentials);
         if ($user) {
             $user->password = null;
-            //$_SESSION['user'] = serialize($user);
-            session()->set('user',serialize($user));
+            $_SESSION['user'] = serialize($user);
+            //session()->set('user',serialize($user));
 
             if (isset($_POST['remember_me'])) {
                 // Chuyển mảng sang chuổi để mã hóa
@@ -35,10 +35,9 @@ class LoginController extends BaseController
 
                 $encrypted = encrypt($str, ENCRYPTION_KEY);
 
-                setcookie('credentials', $encrypted, mktime(23, 59, 59, 12, 1, 2021));
+                setcookie('credentials', $encrypted, mktime(23, 59, 59, 12, 30, 2021));
             }
             session()->setFlash(\FLASH::SUCCESS,'Login successfully!');
-            //redirect('/home');
             $this->redirect('/home');
         }
         $errors[] = 'Username or password is invalid!';

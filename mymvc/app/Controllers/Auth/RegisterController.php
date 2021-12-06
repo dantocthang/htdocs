@@ -15,13 +15,13 @@ class RegisterController extends BaseController
             redirect('/home');
         }
         $error = [];
-        $isPost=false;
-        return $this->render('auth/register',['isPost'=>$isPost]);
+        $isPost = false;
+        return $this->render('auth/register', ['isPost' => $isPost]);
     }
 
     public function register()
     {
-        $isPost=true;
+        $isPost = true;
         $isSuccess = false;
         $params = [];
         $errors = [];
@@ -49,23 +49,21 @@ class RegisterController extends BaseController
             $errors['confirm_password'] = "Password does not match.";
         }
 
-        $exist=$this->checkUsername($params['username']);
-        if ($exist){
-            $errors['username']="this username is already taken. Please choose another one.";
-        }
-        else{
-            $usr=[];
-            $usr['username']=$params['username'];
-            $usr['password']=encrypt_password($params['password']);
-            $usr['email']=$params['email'];
+        $exist = $this->checkUsername($params['username']);
+        if ($exist) {
+            $errors['username'] = "This username is already taken. Please choose another one.";
+        } else {
+            $usr = [];
+            $usr['username'] = $params['username'];
+            $usr['password'] = encrypt_password($params['password']);
+            $usr['email'] = $params['email'];
             $this->insertUser($usr);
-            $isSuccess=true;
-            $message['success']="Congratulations, your account has been created successfully.";
+            $isSuccess = true;
+            $message['success'] = "Congratulations, your account has been created successfully.";
         }
 
-        if ($isSuccess && empty($errors)){
-            return $this->render('auth/register_success',['message'=>$message]);
-        }
-        else return $this->render('auth/register',['errors'=>$errors,'params'=>$params,'isPost'=>$isPost]);
+        if ($isSuccess && empty($errors)) {
+            return $this->render('auth/register_success', ['message' => $message]);
+        } else return $this->render('auth/register', ['errors' => $errors, 'params' => $params, 'isPost' => $isPost]);
     }
 }
